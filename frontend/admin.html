@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { padding: 20px; max-width: 700px; margin: auto; }
+    input, select, button {
+      width: 100%; padding: 10px; margin: 8px 0;
+      border: 1px solid #ccc; border-radius: 8px;
+    }
+    button {
+      background: #6f6b65; color: white; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Добавить категорию</h2>
+  <input id="cat_ru" placeholder="Название категории (RU)">
+  <input id="cat_en" placeholder="Название категории (EN)">
+  <input id="cat_img" placeholder="URL картинки (/img/coffee.jpg)">
+  <button onclick="addCategory()">Добавить категорию</button>
+
+  <h2>Удалить категорию</h2>
+  <input id="cat_id_delete" placeholder="ID категории">
+  <button onclick="deleteCategory()">Удалить</button>
+
+  <h2>Список категорий</h2>
+<div id="categoryList" style="padding: 10px; background: #f9f9f9; border-radius: 8px; margin-bottom: 20px;">
+  <button onclick="loadCategories()">Показать категории</button>
+  <ul id="catListUl"></ul>
+</div>
+
+
+  <hr>
+
+  <h2>Добавить позицию</h2>
+  <input id="item_catid" placeholder="ID категории">
+  <input id="item_ru" placeholder="Название (RU)">
+  <input id="item_en" placeholder="Название (EN)">
+  <input id="item_desc_ru" placeholder="Описание (RU)">
+  <input id="item_desc_en" placeholder="Описание (EN)">
+  <input id="item_price" placeholder="Цена">
+  <input id="item_img" placeholder="URL картинки (/img/items/...jpg)">
+  <button onclick="addItem()">Добавить позицию</button>
+
+  <h2>Удалить позицию</h2>
+  <input id="item_id_delete" placeholder="ID позиции">
+  <button onclick="deleteItem()">Удалить позицию</button>
+
+<h2>Список позиций</h2>
+<div id="itemsList" style="padding: 10px; background: #f9f9f9; border-radius: 8px; margin-bottom: 20px;">
+  <button onclick="loadItems()">Показать позиции</button>
+  <ul id="itemsUl"></ul>
+</div>
+
+
+<script>
+async function addCategory() {
+  await fetch("/api/categories", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name_ru: cat_ru.value,
+      name_en: cat_en.value,
+      image_url: cat_img.value
+    })
+  });
+  alert("Категория добавлена!");
+}
+
+async function deleteCategory() {
+  await fetch("/api/categories/" + cat_id_delete.value, { method: "DELETE" });
+  alert("Категория удалена!");
+}
+
+async function addItem() {
+  await fetch("/api/items", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      category_id: item_catid.value,
+      name_ru: item_ru.value,
+      name_en: item_en.value,
+      description_ru: item_desc_ru.value,
+      description_en: item_desc_en.value,
+      price: item_price.value,
+      image_url: item_img.value
+    })
+  });
+  alert("Позиция добавлена!");
+}
+
+async function deleteItem() {
+  await fetch("/api/items/" + item_id_delete.value, { method: "DELETE" });
+  alert("Позиция удалена!");
+}
+async function loadCategories() {
+  const res = await fetch("/api/categories?lang=ru");
+  const data = await res.json();
+
+  const ul = document.getElementById("catListUl");
+  ul.innerHTML = "";
+
+  data.forEach(cat => {
+    const li = document.createElement("li");
+    li.textContent = `ID: ${cat.id} — ${cat.name}`;
+    ul.appendChild(li);
+  });
+}
+
+async function loadItems() {
+  const res = await fetch("/api/items?category_id=1&lang=ru"); // 1 — просто для загрузки всех
+  const allItems = [];
+
+  // Загружаем ВСЕ категории
+  const categoriesRes = await fetch("/api/categories?lang=ru");
+  const categories = await categoriesRes.json();
+
+  // Для каждой категории загружаем её позиции
+  for (let cat of categories) {
+    const res = await fetch(`/api/items?category_id=${cat.id}&lang=ru`);
+    const items = await res.json();
+
+    items.forEach(item => {
+      allItems.push({
+        id: item.id,
+        category: cat.name,
+        name: item.name,
+        price: item.price
+      });
+    });
+  }
+
+  const ul = document.getElementById("itemsUl");
+  ul.innerHTML = "";
+
+  allItems.forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = `ID: ${item.id} — [${item.category}] ${item.name} — ${item.price}₽`;
+    ul.appendChild(li);
+  });
+}
+
+
+</script>
+
+</body>
+</html>
+

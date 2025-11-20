@@ -149,19 +149,26 @@ app.get('/api/items', (req, res) => {
 // Добавить категорию
 app.post('/api/categories', (req, res) => {
   const { name_ru, name_en, image_url } = req.body;
+
   if (!name_ru || !name_en) {
     return res.status(400).json({ error: 'name_ru and name_en required' });
   }
 
   db.run(
-  `INSERT INTO categories (name_ru, name_en, image_url)
-   VALUES 
-   ('Кофе', 'Coffee', '/img/coffee.jpg'),
-   ('Чай', 'Tea', '/img/tea.jpg'),
-   ('Десерты', 'Desserts', '/img/dessert.jpg')`
-);
+    `INSERT INTO categories (name_ru, name_en, image_url)
+     VALUES (?, ?, ?)`,
+    [name_ru, name_en, image_url || null],
+    function (err) {
+      if (err) {
+        console.error('Ошибка добавления категории:', err);
+        return res.status(500).json({ error: 'DB error' });
+      }
 
+      res.status(201).json({ id: this.lastID });
+    }
+  );
 });
+
 
 // Удалить категорию
 app.delete('/api/categories/:id', (req, res) => {
@@ -225,6 +232,12 @@ app.delete('/api/items/:id', (req, res) => {
 
 // Отдаём фронтенд как статику
 app.use('/', express.static(path.join(__dirname, '..', 'frontend')));
+
+// Страница админ-панели
+app.get("/admin", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/admin.html"));
+});
+
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
