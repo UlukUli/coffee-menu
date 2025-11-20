@@ -230,6 +230,11 @@ app.delete('/api/items/:id', (req, res) => {
   });
 });
 
+app.get("/admin-login", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/admin-login.html"));
+});
+
+
 // Отдаём фронтенд как статику
 app.use('/', express.static(path.join(__dirname, '..', 'frontend')));
 

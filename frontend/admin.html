@@ -13,9 +13,17 @@
     button {
       background: #6f6b65; color: white; cursor: pointer;
     }
+
   </style>
 </head>
 <body>
+
+<script>
+if (!localStorage.getItem("admin")) {
+  window.location.href = "/admin-login";
+}
+</script>
+
 
   <h2>Добавить категорию</h2>
   <input id="cat_ru" placeholder="Название категории (RU)">

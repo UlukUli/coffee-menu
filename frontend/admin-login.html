@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .box {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+      width: 320px;
+      text-align: center;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 15px;
+      background: #6f6b65;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h2>Вход в админку</h2>
+  <input id="pass" type="password" placeholder="Введите пароль">
+  <button onclick="login()">Войти</button>
+</div>
+
+<script>
+const ADMIN_PASSWORD = "1234CoffeeMenuu"; // можешь поменять
+
+function login() {
+  const p = document.getElementById("pass").value;
+
+  if (p === ADMIN_PASSWORD) {
+    localStorage.setItem("admin", "1");
+    window.location.href = "/admin";
+  } else {
+    alert("Неверный пароль!");
+  }
+}
+</script>
+
+</body>
+</html>
