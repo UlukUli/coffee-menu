@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Меню кофейни</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="header-left">
+        <h1 class="logo">Coffee House</h1>
+        <span class="lang-indicator">
+          <span id="currentLangLabel">RU</span>
+        </span>
+      </div>
+      <button id="homeBtn" class="home-btn" title="На главную">
+        🏠
+      </button>
+    </header>
+
+    <!-- Хлебные крошки -->
+    <nav class="breadcrumbs">
+      <span id="breadcrumb-root">Меню</span>
+      <span id="breadcrumb-separator" class="breadcrumbs-separator" hidden>›</span>
+      <span id="breadcrumb-section"></span>
+    </nav>
+
+    <!-- Экран выбора языка -->
+    <section id="screen-lang" class="screen active">
+      <h2 id="lang-title">Выберите язык / Choose language</h2>
+      <div class="lang-buttons">
+        <button class="btn btn-lang" data-lang="ru">Русский</button>
+        <button class="btn btn-lang" data-lang="en">English</button>
+      </div>
+    </section>
+
+    <!-- Экран категорий -->
+    <section id="screen-categories" class="screen">
+      <h2 id="categories-title"></h2>
+      <div id="categories-container" class="grid"></div>
+      <button class="btn back-btn" id="backToLang">← Назад</button>
+    </section>
+
+    <!-- Экран позиций -->
+    <section id="screen-items" class="screen">
+      <h2 id="items-title"></h2>
+      <p id="items-subtitle" class="subtitle"></p>
+      <div id="items-container" class="grid"></div>
+      <button class="btn back-btn" id="backToCategories">← Назад</button>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
