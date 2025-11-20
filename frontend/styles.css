@@ -249,3 +249,9 @@ h2 {
     font-size: 13px;
   }
 }
+.loading-text {
+  text-align: center;
+  padding: 30px 0;
+  font-size: 15px;
+  color: #7b7468;
+}

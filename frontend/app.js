@@ -144,12 +144,32 @@ async function openCategory(category) {
 
   showScreen("items");
 
-  const res = await fetch(
-    `/api/items?category_id=${category.id}&lang=${currentLang}`
-  );
-  const items = await res.json();
-  renderItems(items);
+  // ⭐ СРАЗУ очищаем экран, чтобы старые позиции не мигали
+  itemsContainer.innerHTML = `
+    <p class="loading-text"> ${
+      currentLang === "en" ? "Loading..." : "Загрузка..."
+    } </p>
+  `;
+
+  try {
+    const res = await fetch(
+      `/api/items?category_id=${category.id}&lang=${currentLang}`
+    );
+    const items = await res.json();
+
+    // удаляем надпись "Загрузка" и рисуем карточки
+    itemsContainer.innerHTML = "";
+    renderItems(items);
+  } catch (err) {
+    console.error(err);
+    itemsContainer.innerHTML = `
+      <p class="loading-text">
+        ${currentLang === "en" ? "Load error" : "Ошибка загрузки"}
+      </p>
+    `;
+  }
 }
+
 
 function renderItems(items) {
   const t = TEXTS[currentLang];
