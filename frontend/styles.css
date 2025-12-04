@@ -1,6 +1,3 @@
-
-/* UI improvements */
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -14,11 +11,8 @@ body {
   color: #2f2b26;
 }
 
-
-
-
 .app {
-  max-width: 1024px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 16px;
 }
@@ -33,6 +27,12 @@ body {
 }
 
 .header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-right {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -59,12 +59,181 @@ body {
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
   cursor: pointer;
   font-size: 18px;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
 }
 
 .home-btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  background: #f6f2ec;
+}
+
+/* Кнопка бонусов */
+
+.bonuses-btn {
+  background: #f4b060;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.bonuses-btn:hover {
+  background: #f1a043;
+}
+
+/* ===== Карусель ===== */
+
+.promo-carousel {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  margin-bottom: 18px;
+  background: linear-gradient(135deg, #f7ead7, #fce4c5);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+}
+
+.carousel-track {
+  position: relative;
+  width: 100%;
+  height: 220px;
+}
+
+.carousel-slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: stretch;
+  opacity: 0;
+  transform: translateX(8%);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  pointer-events: none;
+}
+
+.carousel-slide.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.carousel-slide img {
+  width: 55%;
+  object-fit: cover;
+  border-radius: 18px 0 0 18px;
+  transform: scale(1);
+  transition: transform 0.6s ease;
+}
+
+.promo-carousel:hover .carousel-slide.active img {
+  transform: scale(1.04);
+}
+
+.carousel-caption {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  width: 45%;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.carousel-caption h3 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.carousel-caption p {
+  font-size: 14px;
+  color: #6a5f50;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: rgba(255, 255, 255, 0.88);
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+}
+
+.carousel-btn:hover {
+  transform: translateY(-50%) translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  background: #ffffff;
+}
+
+.carousel-btn.prev {
+  left: 10px;
+}
+
+.carousel-btn.next {
+  right: 10px;
+}
+
+.carousel-dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: width 0.2s ease, background 0.2s ease;
+}
+
+.dot.active {
+  width: 18px;
+  background: #ffffff;
+}
+
+/* Мобильная версия карусели */
+
+@media (max-width: 700px) {
+  .carousel-track {
+    height: 210px;
+  }
+
+  .carousel-slide {
+    flex-direction: column;
+  }
+
+  .carousel-slide img {
+    width: 100%;
+    height: 55%;
+    border-radius: 18px 18px 0 0;
+  }
+
+  .carousel-caption {
+    width: 100%;
+    padding: 12px 14px 14px;
+  }
+
+  .carousel-caption h3 {
+    font-size: 17px;
+  }
+
+  .carousel-caption p {
+    font-size: 13px;
+  }
 }
 
 /* ===== Хлебные крошки ===== */
@@ -83,14 +252,24 @@ body {
   font-weight: 600;
 }
 
-/* ===== Общие элементы экранов ===== */
+/* ===== Экраны ===== */
 
 .screen {
   display: none;
+  opacity: 0;
+  transform: translateY(6px);
 }
 
 .screen.active {
   display: block;
+  animation: screenFadeIn 0.35s ease-out forwards;
+}
+
+@keyframes screenFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 h2 {
@@ -121,14 +300,15 @@ h2 {
   color: #fff;
   font-size: 15px;
   cursor: pointer;
-  transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.1s ease;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease,
+    background 0.12s ease;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
 }
 
 .btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-  opacity: 0.95;
+  opacity: 0.96;
 }
 
 .btn-lang {
@@ -141,13 +321,15 @@ h2 {
   background: #6f6b65;
 }
 
-/* ===== Сетка карточек ===== */
+/* ===== Сетка карточек меню ===== */
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 18px;
 }
+
+/* общая карточка */
 
 .card {
   background: #ffffff;
@@ -157,40 +339,42 @@ h2 {
   display: flex;
   flex-direction: column;
   cursor: pointer;
-  transition: transform 0.08s ease-out, box-shadow 0.08s ease-out;
-  will-change: transform, box-shadow;
-  transform: translateZ(0)
-}
-
-/* Анимация только для карточек категорий (Кофе / Чай / Десерты) */
-.card-category {
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  transition: transform 0.16s ease, box-shadow 0.16s ease,
+    filter 0.16s ease;
   will-change: transform, box-shadow;
   transform: translateZ(0);
 }
 
-.card-category:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
-}
-
-
 .card:hover {
-  transform: translateY(-8px); /* больше эффект — приятнее */
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+  filter: brightness(1.02);
 }
 
+/* категории */
+
+.card.card-category:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28);
+}
+
+/* позиции */
+
+.card.card-item:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 9px 22px rgba(0, 0, 0, 0.24);
+}
 
 .card img {
   width: 100%;
-  height: 280px;  /* УВЕЛИЧЕНО */
-  object-fit: cover; /* красиво заполняет карточку */
+  height: 260px;
+  object-fit: cover;
   display: block;
   background: #e3ddd5;
+  transition: transform 0.4s ease;
 }
 
-
-
+.card:hover img {
+  transform: scale(1.03);
+}
 
 .card-body {
   padding: 12px 14px 14px;
@@ -226,9 +410,504 @@ h2 {
   color: #7b5a32;
 }
 
-/* ===== Адаптивность ===== */
+/* анимация появления карточек */
+
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.35s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Бонус-игры ===== */
+
+#screen-bonus {
+  text-align: center;
+}
+
+.bonus-tabs {
+  display: inline-flex;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+  margin: 6px auto 14px;
+}
+
+.bonus-tab {
+  border: none;
+  background: transparent;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.bonus-tab.active {
+  background: #c98e4b;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.bonus-stats {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  background: #ffffff;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 13px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+}
+
+/* подсказка + инструкция */
+
+.bonus-hint {
+  font-size: 13px;
+  color: #6f665c;
+  margin-bottom: 8px;
+}
+
+.bonus-instruction {
+  max-width: 680px;
+  margin: 0 auto 14px;
+  font-size: 13px;
+  color: #5b5147;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  padding: 8px 12px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 0.35s ease-out;
+}
+
+.bonus-instruction strong {
+  display: block;
+  margin-bottom: 3px;
+}
+
+/* поле игры */
+
+.game-area-wrapper {
+  max-width: 760px;
+  margin: 0 auto 10px;
+  background: radial-gradient(circle at top, #f8e6c8 0%, #e1b178 55%, #c58134 100%);
+  border-radius: 18px;
+  padding: 16px 18px 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+}
+
+.game-canvas {
+  position: relative;
+  width: 100%;
+  height: 190px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: linear-gradient(#fbeed4 50%, #c9843c 50%);
+  display: none;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.1);
+  animation: fadeInUp 0.35s ease-out;
+}
+
+.game-canvas.active {
+  display: block;
+}
+
+/* Coffee Runner */
+
+.runner-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(#faecd3 55%, #c9843c 55%);
+}
+
+.runner-player {
+  position: absolute;
+  bottom: 36px;
+  left: 80px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 20%, #ffe9c7, #c6803d);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+  animation: runnerPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes runnerPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.runner-player::after {
+  content: "☕";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+}
+
+.runner-objects {
+  position: absolute;
+  inset: 0;
+}
+
+/* элементы раннера */
+
+.runner-object {
+  position: absolute;
+  bottom: 32px;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.runner-object.bean {
+  background: #7a4a21;
+  color: #f8e6c8;
+}
+
+.runner-object.cup {
+  background: #f9f0e3;
+  color: #c6803d;
+}
+
+.runner-object.box {
+  background: #9b6a3d;
+}
+
+.runner-object.spill {
+  width: 60px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, #7a451e, #4c2a12);
+  bottom: 26px;
+}
+
+/* Cookie Catch */
+
+#game-cookie {
+  background: linear-gradient(#faecd3 60%, #c9843c 60%);
+}
+
+.cookie-objects {
+  position: absolute;
+  inset: 0;
+}
+
+.cookie-item {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  animation: cookieSpin 1.4s linear infinite;
+}
+
+@keyframes cookieSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.cookie-item.good1 {
+  background: #f4d19b;
+}
+.cookie-item.good2 {
+  background: #c88b4b;
+}
+.cookie-item.good3 {
+  background: #f0e0c8;
+}
+.cookie-item.bad {
+  background: #4f3422;
+  color: #fcebd3;
+}
+
+.cookie-tray {
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 30px;
+  border-radius: 999px;
+  background: radial-gradient(circle at top, #f8e4c5, #c47b33);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+  transition: transform 0.08s ease;
+}
+
+.cookie-tray::after {
+  content: "☕";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+/* подпись управления */
+
+.bonus-controls-caption {
+  font-size: 12px;
+  color: #6f665c;
+  margin: 6px 0 12px;
+}
+
+/* управление */
+
+.bonus-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.bonus-input {
+  width: 260px;
+  max-width: 90%;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  outline: none;
+}
+
+.bonus-start-btn {
+  min-width: 150px;
+}
+
+/* ===== Список промокодов ===== */
+
+.bonuses-list-section {
+  margin-top: 24px;
+  text-align: left;
+}
+
+.bonuses-list-section h3 {
+  margin-bottom: 8px;
+}
+
+.bonuses-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.no-bonuses-text {
+  font-size: 13px;
+  color: #7b7468;
+}
+
+.bonus-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 10px 14px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.14);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.bonus-main {
+  flex: 1;
+}
+
+.bonus-code {
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+
+.bonus-description {
+  color: #5f564b;
+  margin-bottom: 3px;
+}
+
+.bonus-meta {
+  font-size: 11px;
+  color: #8c8378;
+}
+
+.bonus-badge {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* цвета уровней */
+
+.bonus-badge.common {
+  background: #eae2d5;
+  color: #5c4d3b;
+}
+
+.bonus-badge.rare {
+  background: #d9ecff;
+  color: #21507c;
+}
+
+.bonus-badge.epic {
+  background: #f6ddff;
+  color: #7d2a88;
+}
+
+.bonus-badge.legendary {
+  background: #ffe8b3;
+  color: #8a4b00;
+}
+
+/* анимация нового бонуса */
+
+.bonus-card.new {
+  animation: bonusPop 0.45s ease-out;
+}
+
+@keyframes bonusPop {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ===== Модальное окно результата ===== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.32);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.modal-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 16px 18px 14px;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  transform: translateY(10px) scale(0.96);
+}
+
+.modal-card.animate {
+  animation: modalPop 0.35s ease-out forwards;
+}
+
+@keyframes modalPop {
+  from {
+    transform: translateY(12px) scale(0.94);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.modal-header h3 {
+  font-size: 18px;
+}
+
+.modal-close-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 2px;
+  color: #6a6257;
+}
+
+.modal-text {
+  font-size: 14px;
+  color: #554a3e;
+  margin-bottom: 8px;
+}
+
+.modal-code-row {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 12px;
+  background: #f4e5cf;
+  margin-bottom: 6px;
+}
+
+.modal-code-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #8a6b3d;
+}
+
+.modal-code-value {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.modal-extra {
+  font-size: 12px;
+  color: #7a7166;
+}
 
 /* ===== Адаптивность ===== */
+
 @media (max-width: 600px) {
   .app {
     padding: 10px;
@@ -238,20 +917,152 @@ h2 {
     font-size: 20px;
   }
 
-  /* Картинки в карточках на телефоне */
-  .card img {
-    height: 220px;              /* можно 200–240, подбери как нравится */
-    object-fit: contain;        /* показываем картинку почти целиком */
-    background-color: #f5eee3;  /* фон вокруг, если остаются поля */
+  /* Делаем именно 2 колонки для категорий и позиций */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
   }
 
-  .subtitle {
-    font-size: 13px;
+  /* Карточки чуть компактнее, чтобы влезали по 2 */
+  .card img {
+    height: 180px;
+    object-fit: cover;
+  }
+
+  .card-body {
+    padding: 10px 11px 12px;
+  }
+
+  .card-title {
+    font-size: 14px;
+  }
+
+  .card-desc {
+    font-size: 12px;
+  }
+
+  .card-price {
+    font-size: 14px;
+  }
+
+  .bonus-stats {
+    gap: 8px;
+  }
+
+  .badge {
+    font-size: 12px;
+    padding: 5px 11px;
+  }
+
+  .game-area-wrapper {
+    padding: 12px 12px 14px;
+  }
+
+  .cookie-tray {
+    width: 100px;
   }
 }
+
+
 .loading-text {
   text-align: center;
   padding: 30px 0;
   font-size: 15px;
   color: #7b7468;
 }
+/* Runner до начала игры */
+#runner-player.idle {
+  animation: runnerIdle 1s ease-in-out infinite alternate;
+}
+
+@keyframes runnerIdle {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(4px);
+  }
+}
+
+/* Поднос до начала игры */
+#cookie-tray.idle {
+  animation: trayIdle 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes trayIdle {
+  from {
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    transform: translateX(-50%) translateY(-3px);
+  }
+}
+
+/* ===== Кнопка немедленной остановки игры (Stop) ===== */
+
+.bonus-stop-btn {
+  min-width: 110px;
+  background: #ffffff;
+  color: #6f6b65;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+  font-size: 14px;
+}
+
+.bonus-stop-btn:hover {
+  background: #f3eee6;
+  color: #4a433c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+}
+/* Горизонтальное расположение контролов на широких экранах */
+
+@media (min-width: 640px) {
+  .bonus-controls {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .bonus-input {
+    margin-right: 8px;
+  }
+
+  .bonus-start-btn,
+  .bonus-stop-btn {
+    margin-top: 0;
+  }
+}
+/* Показываем, что по полю игры можно кликать / тапать */
+
+#game-runner,
+#game-cookie {
+  cursor: pointer;
+}
+/* Отключаем выделение текста и синий "selection" в играх и бонусах */
+
+.game-area-wrapper,
+.game-canvas,
+.runner-player,
+.runner-objects,
+.runner-object,
+.cookie-objects,
+.cookie-item,
+.cookie-tray,
+.bonuses-container,
+.bonus-card,
+.bonus-badge,
+.bonus-controls,
+#screen-bonus {
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Убираем синий тап-хайлайт на мобильных */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+

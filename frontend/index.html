@@ -1,58 +1,269 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-  <meta charset="UTF-8" />
-  <title>Меню кофейни</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <div class="app">
-    <header class="header">
-      <div class="header-left">
-        <h1 class="logo">Coffee House</h1>
-        <span class="lang-indicator">
-          <span id="currentLangLabel">RU</span>
-        </span>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Coffee House – меню и бонус-игры</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <!-- ===== Шапка ===== -->
+      <header class="header">
+        <div class="header-left">
+          <h1 class="logo">Coffee House</h1>
+          <span class="lang-indicator">
+            <span id="currentLangLabel">RU</span>
+          </span>
+        </div>
+
+        <div class="header-right">
+          <button id="getBonusesBtn" class="btn bonuses-btn">
+            🎁 <span id="getBonusesText">Получить бонусы</span>
+          </button>
+
+          <button id="homeBtn" class="home-btn" title="На главную">
+            🏠
+          </button>
+        </div>
+      </header>
+
+      <!-- ===== Карусель промо ===== -->
+      <section class="promo-carousel" id="promo-carousel">
+        <div class="carousel-track">
+          <!-- 1 -->
+          <div class="carousel-slide active">
+            <img src="img/coffeeB.jpg" alt="Morning coffee" />
+            <div
+              class="carousel-caption"
+              data-title-ru="Утренний ритуал"
+              data-text-ru="Начни день с любимого кофе и маленького бонуса."
+              data-title-en="Morning ritual"
+              data-text-en="Start your day with your favourite coffee and a small bonus."
+            >
+              <h3></h3>
+              <p></p>
+            </div>
+          </div>
+          <!-- 2 -->
+          <div class="carousel-slide">
+            <img src="img/teaB.jpg" alt="Winter teas" />
+            <div
+              class="carousel-caption"
+              data-title-ru="Зимние чаи"
+              data-text-ru="Имбирный, облепиховый и другие согревающие вкусы."
+              data-title-en="Winter teas"
+              data-text-en="Ginger, sea buckthorn and other warming flavours."
+            >
+              <h3></h3>
+              <p></p>
+            </div>
+          </div>
+          <!-- 3 -->
+          <div class="carousel-slide">
+            <img src="img/dessertB.jpg" alt="Dessert set" />
+            <div
+              class="carousel-caption"
+              data-title-ru="Сладкий сет"
+              data-text-ru="Кофе + десерт по специальной цене."
+              data-title-en="Sweet set"
+              data-text-en="Coffee and dessert for a special price."
+            >
+              <h3></h3>
+              <p></p>
+            </div>
+          </div>
+          <!-- 4 -->
+          <div class="carousel-slide">
+            <img src="img/milkshakeB.jpg" alt="Milkshakes" />
+            <div
+              class="carousel-caption"
+              data-title-ru="Милкшейки дня"
+              data-text-ru="Выбери вкус: шоколад, клубника, ваниль и другие."
+              data-title-en="Milkshakes of the day"
+              data-text-en="Pick your flavour: chocolate, strawberry, vanilla and more."
+            >
+              <h3></h3>
+              <p></p>
+            </div>
+          </div>
+          <!-- 5 -->
+          <div class="carousel-slide">
+            <img src="img/sandwhichB.jpg" alt="Sandwich combo" />
+            <div
+              class="carousel-caption"
+              data-title-ru="Сэндвич + напиток"
+              data-text-ru="Обеденный комбо-набор по выгодной цене."
+              data-title-en="Sandwich combo"
+              data-text-en="Lunch combo: sandwich with any drink for a special price."
+            >
+              <h3></h3>
+              <p></p>
+            </div>
+          </div>
+        </div>
+
+        <button class="carousel-btn prev" id="carouselPrev">‹</button>
+        <button class="carousel-btn next" id="carouselNext">›</button>
+
+        <div class="carousel-dots" id="carouselDots">
+          <button class="dot active" data-index="0"></button>
+          <button class="dot" data-index="1"></button>
+          <button class="dot" data-index="2"></button>
+          <button class="dot" data-index="3"></button>
+          <button class="dot" data-index="4"></button>
+        </div>
+      </section>
+
+      <!-- ===== Хлебные крошки ===== -->
+      <nav class="breadcrumbs">
+        <span id="breadcrumb-root">Меню</span>
+        <span id="breadcrumb-separator" class="breadcrumbs-separator" hidden
+          >›</span
+        >
+        <span id="breadcrumb-section"></span>
+      </nav>
+
+      <!-- ===== Экран выбора языка ===== -->
+      <section id="screen-lang" class="screen active">
+        <h2 id="lang-title">Выберите язык / Choose language</h2>
+        <div class="lang-buttons">
+          <button class="btn btn-lang" data-lang="ru">Русский</button>
+          <button class="btn btn-lang" data-lang="en">English</button>
+        </div>
+      </section>
+
+      <!-- ===== Экран категорий ===== -->
+      <section id="screen-categories" class="screen">
+        <h2 id="categories-title"></h2>
+        <div id="categories-container" class="grid"></div>
+        <button class="btn back-btn" id="backToLang">← Назад</button>
+      </section>
+
+      <!-- ===== Экран позиций ===== -->
+      <section id="screen-items" class="screen">
+        <h2 id="items-title"></h2>
+        <p id="items-subtitle" class="subtitle"></p>
+        <div id="items-container" class="grid"></div>
+        <button class="btn back-btn" id="backToCategories">← Назад</button>
+      </section>
+
+      <!-- ===== Экран бонус-игр ===== -->
+      <section id="screen-bonus" class="screen">
+        <h2 id="bonus-title">Bonus games</h2>
+        <p id="bonus-subtitle" class="subtitle">
+          Choose a mini game, score points and get a coffee bonus.
+        </p>
+
+        <!-- Переключатель игр -->
+        <div class="bonus-tabs">
+          <button
+            id="tab-runner"
+            class="bonus-tab active"
+            data-game="runner"
+          >
+            ☕ Coffee Runner
+          </button>
+          <button
+            id="tab-cookie"
+            class="bonus-tab"
+            data-game="cookie"
+          >
+            🍪 Catch the Cookie
+          </button>
+        </div>
+
+        <!-- Статистика -->
+        <div class="bonus-stats">
+          <div class="badge" id="bonus-timer-badge">⏱ 40 s</div>
+          <div class="badge" id="bonus-score-badge">⭐ Score: 0</div>
+          <div class="badge" id="bonus-total-badge">
+            🎁 Total bonuses: 0
+          </div>
+        </div>
+
+        <!-- Краткая подсказка -->
+        <p id="bonus-hint" class="bonus-hint">
+          Desktop: Space to jump. Mobile: tap the game area.
+        </p>
+
+        <!-- Красивая инструкция по игре -->
+        <div id="bonus-instruction" class="bonus-instruction"></div>
+
+        <!-- Поле игры -->
+        <div class="game-area-wrapper">
+          <div id="game-runner" class="game-canvas active">
+            <div class="runner-bg"></div>
+            <div id="runner-player" class="runner-player"></div>
+            <div id="runner-objects" class="runner-objects"></div>
+          </div>
+
+          <div id="game-cookie" class="game-canvas">
+            <div id="cookie-objects" class="cookie-objects"></div>
+            <div id="cookie-tray" class="cookie-tray"></div>
+          </div>
+        </div>
+
+        <!-- Управление и имя -->
+        <p id="bonus-controls-caption" class="bonus-controls-caption">
+          Desktop: arrows ← → or A/D. Mobile: tap left/right side of the game
+          area.
+        </p>
+
+        <div class="bonus-controls">
+          <input
+            type="text"
+            id="bonusUserName"
+            class="bonus-input"
+            placeholder="Ваше имя для сохранения бонусов"
+          />
+          <button id="bonusStartBtn" class="btn bonus-start-btn">
+            Start game
+          </button>
+          <!-- Кнопка немедленной остановки игры -->
+          <button id="bonusStopBtn" class="btn bonus-stop-btn">
+            Stop
+          </button>
+        </div>
+
+        <button class="btn back-btn" id="backFromBonus">
+          ← Back to menu
+        </button>
+
+        <!-- ===== Список промокодов ===== -->
+        <section class="bonuses-list-section">
+          <h3 id="my-bonuses-title">Мои бонусы</h3>
+          <div id="bonuses-container" class="bonuses-container">
+            <p id="no-bonuses-text" class="no-bonuses-text">
+              У вас пока нет бонусов.
+            </p>
+          </div>
+        </section>
+      </section>
+
+      <!-- ===== Модальное окно результата игры ===== -->
+      <div id="resultModal" class="modal-overlay">
+        <div class="modal-card">
+          <div class="modal-header">
+            <h3 id="resultModalTitle"></h3>
+            <button id="resultModalClose" class="modal-close-btn">
+              ✕
+            </button>
+          </div>
+          <p id="resultModalText" class="modal-text"></p>
+
+          <div id="resultModalCodeRow" class="modal-code-row">
+            <span id="resultModalCodeLabel" class="modal-code-label">
+              Промокод
+            </span>
+            <span id="resultModalCode" class="modal-code-value"></span>
+          </div>
+
+          <p id="resultModalExtra" class="modal-extra"></p>
+        </div>
       </div>
-      <button id="homeBtn" class="home-btn" title="На главную">
-        🏠
-      </button>
-    </header>
+    </div>
 
-    <!-- Хлебные крошки -->
-    <nav class="breadcrumbs">
-      <span id="breadcrumb-root">Меню</span>
-      <span id="breadcrumb-separator" class="breadcrumbs-separator" hidden>›</span>
-      <span id="breadcrumb-section"></span>
-    </nav>
-
-    <!-- Экран выбора языка -->
-    <section id="screen-lang" class="screen active">
-      <h2 id="lang-title">Выберите язык / Choose language</h2>
-      <div class="lang-buttons">
-        <button class="btn btn-lang" data-lang="ru">Русский</button>
-        <button class="btn btn-lang" data-lang="en">English</button>
-      </div>
-    </section>
-
-    <!-- Экран категорий -->
-    <section id="screen-categories" class="screen">
-      <h2 id="categories-title"></h2>
-      <div id="categories-container" class="grid"></div>
-      <button class="btn back-btn" id="backToLang">← Назад</button>
-    </section>
-
-    <!-- Экран позиций -->
-    <section id="screen-items" class="screen">
-      <h2 id="items-title"></h2>
-      <p id="items-subtitle" class="subtitle"></p>
-      <div id="items-container" class="grid"></div>
-      <button class="btn back-btn" id="backToCategories">← Назад</button>
-    </section>
-  </div>
-
-  <script src="app.js"></script>
-</body>
+    <script src="app.js"></script>
+  </body>
 </html>
-
