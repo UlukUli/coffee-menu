@@ -5,6 +5,12 @@ const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+// Путь к фронтенду (index.html, admin.html, admin-login.html, стили, скрипты)
+const frontendPath = path.join(__dirname, "..", "frontend");
+
+// Раздаём всё содержимое папки frontend как статику
+app.use(express.static(frontendPath));
+
 
 const dbPath = path.join(__dirname, "menu.db");
 const db = new sqlite3.Database(dbPath);
@@ -392,6 +398,18 @@ app.delete("/api/items/:id", (req, res) => {
 
 // статика фронтенда
 app.use("/", express.static(path.join(__dirname, "..", "frontend")));
+// ===== Страницы админки =====
+
+// Страница логина администратора
+app.get("/admin-login", (req, res) => {
+  res.sendFile(path.join(frontendPath, "admin-login.html"));
+});
+
+// Основная страница админ-панели
+app.get("/admin", (req, res) => {
+  res.sendFile(path.join(frontendPath, "admin.html"));
+});
+
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
